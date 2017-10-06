@@ -23,23 +23,28 @@ namespace SnakeMess
 			short newDir = 2; // 0 = up, 1 = right, 2 = down, 3 = left
 			short last = newDir;
 			int boardW = Console.WindowWidth, boardH = Console.WindowHeight;
-			Random rng = new Random();
-			Point app = new Point();
-			List<Point> snake = new List<Point>();
-			snake.Add(new Point(10, 10)); snake.Add(new Point(10, 10)); snake.Add(new Point(10, 10)); snake.Add(new Point(10, 10));
+
+            Apple app = new Apple( boardW, boardH);
+			Snake snake = new Snake();
+
 			Console.CursorVisible = false;
 			Console.Title = "Westerdals Oslo ACT - SNAKE";
-			Console.ForegroundColor = ConsoleColor.Green; Console.SetCursorPosition(10, 10); Console.Write("@");
+			Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(10, 10);
+            Console.Write("@");
+
 			while (true) {
-				app.X = rng.Next(0, boardW); app.Y = rng.Next(0, boardH);
+                app.nextRandomPosition();
 				bool spot = true;
-				foreach (Point i in snake)
-					if (i.X == app.X && i.Y == app.Y) {
+				foreach (Point i in snake.body)
+					if (i.X == app.point.X && i.Y == app.point.Y) {
 						spot = false;
 						break;
 					}
 				if (spot) {
-					Console.ForegroundColor = ConsoleColor.Green; Console.SetCursorPosition(app.X, app.Y); Console.Write("$");
+					Console.ForegroundColor = ConsoleColor.Green;
+                    Console.SetCursorPosition(app.point.X, app.point.Y);
+                    Console.Write("$");
 					break;
 				}
 			}
@@ -65,8 +70,8 @@ namespace SnakeMess
 					if (t.ElapsedMilliseconds < 100)
 						continue;
 					t.Restart();
-					Point tail = new Point(snake.First());
-					Point head = new Point(snake.Last());
+					Point tail = new Point(snake.body.First());
+					Point head = new Point(snake.body.Last());
 					Point newH = new Point(head);
 					switch (newDir) {
 						case 0:
@@ -86,16 +91,16 @@ namespace SnakeMess
 						gg = true;
 					else if (newH.Y < 0 || newH.Y >= boardH)
 						gg = true;
-					if (newH.X == app.X && newH.Y == app.Y) {
-						if (snake.Count + 1 >= boardW * boardH)
+					if (newH.X == app.point.X && newH.Y == app.point.Y) {
+						if (snake.body.Count + 1 >= boardW * boardH)
 							// No more room to place apples - game over.
 							gg = true;
 						else {
 							while (true) {
-								app.X = rng.Next(0, boardW); app.Y = rng.Next(0, boardH);
+                                app.nextRandomPosition();
 								bool found = true;
-								foreach (Point i in snake)
-									if (i.X == app.X && i.Y == app.Y) {
+								foreach (Point i in snake.body)
+									if (i.X == app.point.X && i.Y == app.point.Y) {
 										found = false;
 										break;
 									}
@@ -107,8 +112,8 @@ namespace SnakeMess
 						}
 					}
 					if (!inUse) {
-						snake.RemoveAt(0);
-						foreach (Point x in snake)
+						snake.body.RemoveAt(0);
+						foreach (Point x in snake.body)
 							if (x.X == newH.X && x.Y == newH.Y) {
 								// Death by accidental self-cannibalism.
 								gg = true;
@@ -117,15 +122,21 @@ namespace SnakeMess
 					}
 					if (!gg) {
 						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.SetCursorPosition(head.X, head.Y); Console.Write("0");
+						Console.SetCursorPosition(head.X, head.Y);
+                        Console.Write("0");
 						if (!inUse) {
-							Console.SetCursorPosition(tail.X, tail.Y); Console.Write(" ");
+							Console.SetCursorPosition(tail.X, tail.Y);
+                            Console.Write(" ");
 						} else {
-							Console.ForegroundColor = ConsoleColor.Green; Console.SetCursorPosition(app.X, app.Y); Console.Write("$");
+							Console.ForegroundColor = ConsoleColor.Green;
+                            Console.SetCursorPosition(app.point.X, app.point.Y);
+                            Console.Write("$");
 							inUse = false;
 						}
-						snake.Add(newH);
-						Console.ForegroundColor = ConsoleColor.Yellow; Console.SetCursorPosition(newH.X, newH.Y); Console.Write("@");
+						snake.body.Add(newH);
+						Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.SetCursorPosition(newH.X, newH.Y);
+                        Console.Write("@");
 						last = newDir;
 					}
 				}

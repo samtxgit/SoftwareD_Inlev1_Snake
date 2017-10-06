@@ -7,13 +7,21 @@ namespace SnakeMess
 {
     class Apple
     {
-
-        Apple(int boardWith, int boardHeiht) {
-            Random rnd = new Random();
-            Point point = new Point();
+        public Random rnd;
+        public Point point;
+        int _boardWith;
+        int _boardHeiht;
+        public Apple(int boardWith, int boardHeiht) {
+            rnd = new Random();
+            point = new Point();
+            _boardHeiht = boardHeiht;
+            _boardWith = boardWith;
             point.X = rnd.Next(0, boardWith); point.Y = rnd.Next(0, boardHeiht);
         }
-        
-        
+
+        public void nextRandomPosition() {
+            point.X = rnd.Next(0, _boardWith); point.Y = rnd.Next(0, _boardHeiht);
+
+        }
     }
 }
