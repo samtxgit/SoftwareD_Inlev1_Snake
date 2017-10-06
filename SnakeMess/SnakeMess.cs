@@ -19,13 +19,19 @@ namespace SnakeMess
 	{
 		public static void Main(string[] arguments)
 		{
-			bool gg = false, pause = false, inUse = false;
+			//bool gg = false, pause = false, inUse = false;
 			short newDir = 2; // 0 = up, 1 = right, 2 = down, 3 = left
 			short last = newDir;
-			int boardW = Console.WindowWidth, boardH = Console.WindowHeight;
+            int boardW = Console.WindowWidth;
+            int boardH = Console.WindowHeight;
 
-            Apple app = new Apple( boardW, boardH);
-			Snake snake = new Snake();
+   //         Apple app = new Apple( boardW, boardH);
+			//Snake snake = new Snake();
+
+            GameObject gameObject = new GameObject(boardW, boardH);
+            gameObject.goodGame = false;
+            gameObject.pause = false;
+            gameObject.inUse = false;
 
 			Console.CursorVisible = false;
 			Console.Title = "Westerdals Oslo ACT - SNAKE";
@@ -34,29 +40,30 @@ namespace SnakeMess
             Console.Write("@");
 
 			while (true) {
-                app.nextRandomPosition();
+                gameObject.apple.nextRandomPosition();
+                
 				bool spot = true;
-				foreach (Point i in snake.body)
-					if (i.X == app.point.X && i.Y == app.point.Y) {
+				foreach (Point i in gameObject.snake.body)
+					if (i.X == gameObject.apple.point.X && i.Y == gameObject.apple.point.Y) {
 						spot = false;
 						break;
 					}
 				if (spot) {
 					Console.ForegroundColor = ConsoleColor.Green;
-                    Console.SetCursorPosition(app.point.X, app.point.Y);
+                    Console.SetCursorPosition(gameObject.apple.point.X, gameObject.apple.point.Y);
                     Console.Write("$");
 					break;
 				}
 			}
 			Stopwatch t = new Stopwatch();
 			t.Start();
-			while (!gg) {
+			while (!gameObject.goodGame) {
 				if (Console.KeyAvailable) {
 					ConsoleKeyInfo cki = Console.ReadKey(true);
 					if (cki.Key == ConsoleKey.Escape)
-						gg = true;
+						gameObject.goodGame = true;
 					else if (cki.Key == ConsoleKey.Spacebar)
-						pause = !pause;
+						gameObject.pause= !gameObject.pause;
 					else if (cki.Key == ConsoleKey.UpArrow && last != 2)
 						newDir = 0;
 					else if (cki.Key == ConsoleKey.RightArrow && last != 3)
@@ -66,12 +73,12 @@ namespace SnakeMess
 					else if (cki.Key == ConsoleKey.LeftArrow && last != 1)
 						newDir = 3;
 				}
-				if (!pause) {
+				if (!gameObject.pause) {
 					if (t.ElapsedMilliseconds < 100)
 						continue;
 					t.Restart();
-					Point tail = new Point(snake.body.First());
-					Point head = new Point(snake.body.Last());
+					Point tail = new Point(gameObject.snake.body.First());
+					Point head = new Point(gameObject.snake.body.Last());
 					Point newH = new Point(head);
 					switch (newDir) {
 						case 0:
@@ -88,52 +95,53 @@ namespace SnakeMess
 							break;
 					}
 					if (newH.X < 0 || newH.X >= boardW)
-						gg = true;
+						gameObject.goodGame= true;
 					else if (newH.Y < 0 || newH.Y >= boardH)
-						gg = true;
-					if (newH.X == app.point.X && newH.Y == app.point.Y) {
-						if (snake.body.Count + 1 >= boardW * boardH)
-							// No more room to place apples - game over.
-							gg = true;
+                        gameObject.goodGame = true;
+					if (newH.X == gameObject.apple.point.X && newH.Y == gameObject.apple.point.Y) {
+						if (gameObject.snake.body.Count + 1 >= boardW * boardH)
+                            // No more room to place apples - game over.
+                            gameObject.goodGame = true;
 						else {
 							while (true) {
-                                app.nextRandomPosition();
-								bool found = true;
-								foreach (Point i in snake.body)
-									if (i.X == app.point.X && i.Y == app.point.Y) {
+                                gameObject.apple.nextRandomPosition();
+                                bool found = true;
+								foreach (Point i in gameObject.snake.body)
+									if (i.X == gameObject.apple.point.X && i.Y == gameObject.apple.point.Y) {
 										found = false;
 										break;
 									}
 								if (found) {
-									inUse = true;
+                                    gameObject.inUse = true;
 									break;
 								}
 							}
 						}
 					}
-					if (!inUse) {
-						snake.body.RemoveAt(0);
-						foreach (Point x in snake.body)
+					if (!gameObject.inUse) {
+                        gameObject.snake.body.RemoveAt(0);
+						foreach (Point x in gameObject.snake.body)
 							if (x.X == newH.X && x.Y == newH.Y) {
 								// Death by accidental self-cannibalism.
-								gg = true;
+								gameObject.goodGame = true;
 								break;
 							}
 					}
-					if (!gg) {
+					if (!gameObject.goodGame){
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						Console.SetCursorPosition(head.X, head.Y);
                         Console.Write("0");
-						if (!inUse) {
+						if (!gameObject.inUse)
+                        {
 							Console.SetCursorPosition(tail.X, tail.Y);
                             Console.Write(" ");
 						} else {
 							Console.ForegroundColor = ConsoleColor.Green;
-                            Console.SetCursorPosition(app.point.X, app.point.Y);
+                            Console.SetCursorPosition(gameObject.apple.point.X, gameObject.apple.point.Y);
                             Console.Write("$");
-							inUse = false;
+                            gameObject.inUse= false;
 						}
-						snake.body.Add(newH);
+                        gameObject.snake.body.Add(newH);
 						Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.SetCursorPosition(newH.X, newH.Y);
                         Console.Write("@");

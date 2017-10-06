@@ -7,12 +7,21 @@ namespace SnakeMess
 {
     class GameObject
     {
-        Snake snake = new Snake();
-        Apple apple = new Apple(1, 1 );
-        bool goodGame = false;
-        bool pause = false;
-        bool inUse = false;
-        bool gameOver = false;
+       public  Snake snake;
+        public Apple apple;
+        public bool goodGame;
+        public bool pause;
+        public bool inUse;
+        public bool gameOver;
+        public GameObject(int boardWith, int boardHeiht)
+        {
+            snake = new Snake();
+            apple = new Apple(boardWith,boardHeiht );
+            goodGame = false;
+            pause = false;
+            inUse = false;
+            gameOver = false;
+        }
     }
 }
 
