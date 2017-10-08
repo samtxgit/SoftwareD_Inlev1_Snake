@@ -1,0 +1,5 @@
+C:\Users\Even\Source\Repos\SoftwareD_Inlev1_Snake\SnakeMess\bin\Debug\SnakeMess.exe
+C:\Users\Even\Source\Repos\SoftwareD_Inlev1_Snake\SnakeMess\bin\Debug\SnakeMess.pdb
+C:\Users\Even\Source\Repos\SoftwareD_Inlev1_Snake\SnakeMess\obj\x86\Debug\SnakeMess.csprojResolveAssemblyReference.cache
+C:\Users\Even\Source\Repos\SoftwareD_Inlev1_Snake\SnakeMess\obj\x86\Debug\SnakeMess.exe
+C:\Users\Even\Source\Repos\SoftwareD_Inlev1_Snake\SnakeMess\obj\x86\Debug\SnakeMess.pdb

@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 
-// WARNING: DO NOT code like this. Please. EVER! 
-//          "Aaaargh!" 
-//          "My eyes bleed!" 
-//          "I facepalmed my facepalm." 
-//          Etc.
-//          I had a lot of fun obfuscating this code! And I can now (proudly?) say that this is the uggliest short piece of code I've ever written!
-//          (And yes, it could have been ugglier. But the idea wasn't to make it fuggly-uggly, just funny-uggly or sweet-uggly.)
-//
-//          -Tomas
-//
 namespace SnakeMess
 {
 	class SnakeMess
@@ -21,44 +10,26 @@ namespace SnakeMess
 		{
 			short newDir = 2; // 0 = up, 1 = right, 2 = down, 3 = left
 			short last = newDir;
-            int boardW = Console.WindowWidth;
-            int boardH = Console.WindowHeight;
-            GameObject gameObject = new GameObject(boardW, boardH);
-            gameObject.goodGame = false;
-            gameObject.pause = false;
-            gameObject.inUse = false;
+            GameBoard board = new GameBoard();
+            GameObject gameObject = new GameObject(board.W, board.H);
 
-			Console.CursorVisible = false;
-			Console.Title = "Westerdals Oslo ACT - SNAKE";
-			Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(10, 10);
-            Console.Write("@");
-
-			while (true) {
+            do
+            {
                 gameObject.apple.nextRandomPosition();
                 
-				bool spot = true;
-				foreach (Point i in gameObject.snake.body)
-					if (i.X == gameObject.apple.point.X && i.Y == gameObject.apple.point.Y) {
-						spot = false;
-						break;
-					}
-				if (spot) {
-					Console.ForegroundColor = ConsoleColor.Green;
-                    Console.SetCursorPosition(gameObject.apple.point.X, gameObject.apple.point.Y);
-                    Console.Write("$");
-					break;
-				}
-			}
-			Stopwatch t = new Stopwatch();
+
+            } while (!gameObject.apple.checkSpawnCollision(gameObject.snake));
+            board.writeApple(gameObject.apple.point.X, gameObject.apple.point.Y);
+
+            Stopwatch t = new Stopwatch();
 			t.Start();
-			while (!gameObject.goodGame) {
+			while (!gameObject.gameOver) {
 				if (Console.KeyAvailable) {
 					ConsoleKeyInfo cki = Console.ReadKey(true);
 					if (cki.Key == ConsoleKey.Escape)
-						gameObject.goodGame = true;
+						gameObject.gameOver = true;
 					else if (cki.Key == ConsoleKey.Spacebar)
-						gameObject.pause= !gameObject.pause;
+						gameObject.gamePause= !gameObject.gamePause;
 					else if (cki.Key == ConsoleKey.UpArrow && last != 2)
 						newDir = 0;
 					else if (cki.Key == ConsoleKey.RightArrow && last != 3)
@@ -68,7 +39,7 @@ namespace SnakeMess
 					else if (cki.Key == ConsoleKey.LeftArrow && last != 1)
 						newDir = 3;
 				}
-				if (!gameObject.pause) {
+				if (!gameObject.gamePause) {
 					if (t.ElapsedMilliseconds < 100)
 						continue;
 					t.Restart();
@@ -89,14 +60,14 @@ namespace SnakeMess
 							newH.X -= 1;
 							break;
 					}
-					if (newH.X < 0 || newH.X >= boardW)
-						gameObject.goodGame= true;
-					else if (newH.Y < 0 || newH.Y >= boardH)
-                        gameObject.goodGame = true;
+					if (newH.X < 0 || newH.X >= board.W)
+						gameObject.gameOver = true;
+					else if (newH.Y < 0 || newH.Y >= board.H)
+                        gameObject.gameOver = true;
 					if (newH.X == gameObject.apple.point.X && newH.Y == gameObject.apple.point.Y) {
-						if (gameObject.snake.body.Count + 1 >= boardW * boardH)
+						if (gameObject.snake.body.Count + 1 >= board.W * board.H)
                             // No more room to place apples - game over.
-                            gameObject.goodGame = true;
+                            gameObject.gameOver = true;
 						else {
 							while (true) {
                                 gameObject.apple.nextRandomPosition();
@@ -107,39 +78,33 @@ namespace SnakeMess
 										break;
 									}
 								if (found) {
-                                    gameObject.inUse = true;
+                                    gameObject.writeApple = true;
 									break;
 								}
 							}
 						}
 					}
-					if (!gameObject.inUse) {
+					if (!gameObject.writeApple) {
                         gameObject.snake.body.RemoveAt(0);
 						foreach (Point x in gameObject.snake.body)
 							if (x.X == newH.X && x.Y == newH.Y) {
 								// Death by accidental self-cannibalism.
-								gameObject.goodGame = true;
+								gameObject.gameOver = true;
 								break;
 							}
 					}
-					if (!gameObject.goodGame){
-						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.SetCursorPosition(head.X, head.Y);
-                        Console.Write("0");
-						if (!gameObject.inUse)
+					if (!gameObject.gameOver){
+                        board.writeBody(head.X, head.Y);
+
+                        if (!gameObject.writeApple)
                         {
-							Console.SetCursorPosition(tail.X, tail.Y);
-                            Console.Write(" ");
+                            board.eraseTail(tail.X, tail.Y);
 						} else {
-							Console.ForegroundColor = ConsoleColor.Green;
-                            Console.SetCursorPosition(gameObject.apple.point.X, gameObject.apple.point.Y);
-                            Console.Write("$");
-                            gameObject.inUse= false;
+                            board.writeApple(gameObject.apple.point.X, gameObject.apple.point.Y);
+                            gameObject.writeApple = false;
 						}
                         gameObject.snake.body.Add(newH);
-						Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.SetCursorPosition(newH.X, newH.Y);
-                        Console.Write("@");
+                        board.writeHead(newH.X, newH.Y);
 						last = newDir;
 					}
 				}
