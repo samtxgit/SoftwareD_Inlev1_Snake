@@ -9,19 +9,17 @@ namespace SnakeMess
     {
        public  Snake snake;
         public Apple apple;
-        public bool goodGame;
-        public bool pause;
-        public bool inUse;
         public bool gameOver;
-        public GameObject(int boardWith, int boardHeiht)
+        public bool gamePause;
+        public bool writeApple;
+
+        public GameObject(int boardWidth, int boardHeight)
         {
             snake = new Snake();
-            apple = new Apple(boardWith,boardHeiht );
-            goodGame = false;
-            pause = false;
-            inUse = false;
+            apple = new Apple(boardWidth,boardHeight );
             gameOver = false;
+            gamePause = false;
+            writeApple = false;
         }
     }
 }
-
