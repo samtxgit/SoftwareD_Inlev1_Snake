@@ -17,7 +17,13 @@ namespace SnakeMess
                 body.Add(new Point(10, 10));
                 body.Add(new Point(10, 10));
             }
+            initSnake();
+        }
 
+        private void initSnake() {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(10, 10);
+            Console.Write("@");
         }
 
     }
