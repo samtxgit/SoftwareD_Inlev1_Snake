@@ -3,9 +3,8 @@ namespace SnakeMess
 {
     class Point
     {
-        //public const string Ok = "Ok";
 
-        #region Propertys
+        #region Propertis
         public int X
         {
             get; set;
