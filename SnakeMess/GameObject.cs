@@ -15,16 +15,16 @@ namespace SnakeMess
         {
             snake = new Snake();
             apple = new Apple(boardWidth,boardHeight );
-            apple.printFirstApple(snake);
+            apple.PrintFirstApple(snake);
         }
 
         public Point getSnakeBodysFirst() {
-            return snake.body.First();
+            return snake.bodyList.First();
         }
 
         public Point getSnakeBodysLast()
         {
-            return snake.body.Last();
+            return snake.bodyList.Last();
         }
 
         public int getApplePoint_X() {
@@ -37,16 +37,16 @@ namespace SnakeMess
         }
 
         public int getSnakeCount() {
-            return snake.body.Count;
+            return snake.bodyList.Count;
         }
 
         public bool  printNextApple() {
-            var inUse = apple.printNextApple(snake);
+            var inUse = apple.PrintNextApple(snake);
             return inUse;
         }
 
         public void removeitemFromSnakeAtIndex(int index) {
-            snake.body.RemoveAt(index);
+            snake.bodyList.RemoveAt(index);
         }
 
         public Snake getSnake() {
@@ -54,7 +54,7 @@ namespace SnakeMess
         }
 
         public void addToSnake(Point head) {
-            snake.body.Add(head);
+            snake.bodyList.Add(head);
         }
     }
 }

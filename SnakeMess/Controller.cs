@@ -75,7 +75,7 @@ namespace SnakeMess
                     if (!inUse)
                     {
                         gameObject.removeitemFromSnakeAtIndex(0);
-                        foreach (Point x in gameObject.getSnake().body)
+                        foreach (Point x in gameObject.getSnake().bodyList)
                             if (x.X == newH.X && x.Y == newH.Y)
                             {
                                 // Death by accidental self-cannibalism.
