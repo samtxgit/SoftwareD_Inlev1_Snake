@@ -1,30 +1,40 @@
-﻿using System;
+﻿using static System.Console;
+using static System.ConsoleColor;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SnakeMess
 {
     class Snake
     {
-        public List<Point> body;
-        public Snake() {
-            body = new List<Point>();
+        #region Public field
+        public List<Point> bodyList;
+        #endregion
 
-            for (int i = 0; i < 4; i++) {
-                body.Add(new Point(10, 10));
-                body.Add(new Point(10, 10));
-                body.Add(new Point(10, 10));
-                body.Add(new Point(10, 10));
+        #region Constructor
+        public Snake()
+        {
+            bodyList = new List<Point>();
+
+            for (int i = 0; i < 4; i++)
+            {
+                bodyList.Add(new Point(10, 10));
+                bodyList.Add(new Point(10, 10));
+                bodyList.Add(new Point(10, 10));
+                bodyList.Add(new Point(10, 10));
             }
-            initSnake();
+            InitSnake();
         }
+        #endregion
 
-        private void initSnake() {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(10, 10);
-            Console.Write("@");
+        #region Private Method
+        private void InitSnake()
+        {
+            ForegroundColor = Green;
+            SetCursorPosition(10, 10);
+            Write("@");
         }
+        #endregion
 
     }
 }
+

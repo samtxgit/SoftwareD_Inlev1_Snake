@@ -5,7 +5,7 @@ namespace SnakeMess
     class Apple
     {
         #region fields
-        private Random rnd;
+        private Random _rnd;
         private int _boardWith;
         private int _boardHeiht;
 
@@ -15,31 +15,31 @@ namespace SnakeMess
         #region Constructor 
         public Apple(int boardWidth, int boardHeight)
         {
-            rnd = new Random();
+            _rnd = new Random();
             point = new Point();
             _boardHeiht = boardHeight;
             _boardWith = boardWidth;
-            point.X = rnd.Next(0, boardWidth);
-            point.Y = rnd.Next(0, boardHeight);
+            point.X = _rnd.Next(0, boardWidth);
+            point.Y = _rnd.Next(0, boardHeight);
         }
         #endregion
 
         #region public methods
-        public void nextRandomPosition()
+        public void NextRandomPosition()
         {
-            point.X = rnd.Next(0, _boardWith);
-            point.Y = rnd.Next(0, _boardHeiht);
+            point.X = _rnd.Next(0, _boardWith);
+            point.Y = _rnd.Next(0, _boardHeiht);
 
         }
 
-        public void printFirstApple(Snake snake)
+        public void PrintFirstApple(Snake snake)
         {
             while (true)
             {
-                this.nextRandomPosition();
+                this.NextRandomPosition();
 
                 bool spot = true;
-                foreach (Point i in snake.body)
+                foreach (Point i in snake.bodyList)
                 {
                     if (i.X == point.X && i.Y == point.Y)
                     {
@@ -57,14 +57,14 @@ namespace SnakeMess
             }
         }
 
-        public bool printNextApple(Snake snake)
+        public bool PrintNextApple(Snake snake)
         {
             bool inUse = false;
             while (true)
             {
-                this.nextRandomPosition();
+                this.NextRandomPosition();
                 bool found = true;
-                foreach (Point i in snake.body)
+                foreach (Point i in snake.bodyList)
                     if (i.X == this.point.X && i.Y == this.point.Y)
                     {
                         found = false;
