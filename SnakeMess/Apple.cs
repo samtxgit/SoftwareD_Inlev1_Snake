@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SnakeMess
 {
     class Apple
     {
-        public Random rnd;
+        #region fields
+        private Random rnd;
+        private int _boardWith;
+        private int _boardHeiht;
+
         public Point point;
-        int _boardWith;
-        int _boardHeiht;
-        public Apple(int boardWidth, int boardHeight) {
+        #endregion
+
+        #region Constructor 
+        public Apple(int boardWidth, int boardHeight)
+        {
             rnd = new Random();
             point = new Point();
             _boardHeiht = boardHeight;
@@ -19,14 +22,18 @@ namespace SnakeMess
             point.X = rnd.Next(0, boardWidth);
             point.Y = rnd.Next(0, boardHeight);
         }
+        #endregion
 
-        public void nextRandomPosition() {
+        #region public methods
+        public void nextRandomPosition()
+        {
             point.X = rnd.Next(0, _boardWith);
             point.Y = rnd.Next(0, _boardHeiht);
 
         }
 
-        public void printFirstApple(Snake snake) {
+        public void printFirstApple(Snake snake)
+        {
             while (true)
             {
                 this.nextRandomPosition();
@@ -50,7 +57,8 @@ namespace SnakeMess
             }
         }
 
-        public bool printNextApple(Snake snake) {
+        public bool printNextApple(Snake snake)
+        {
             bool inUse = false;
             while (true)
             {
@@ -69,5 +77,7 @@ namespace SnakeMess
                 }
             }
         }
+        #endregion
     }
 }
+
