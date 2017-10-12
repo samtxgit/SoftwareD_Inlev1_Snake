@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using static System.Console;
+using static System.ConsoleColor;
 using System.Diagnostics;
 
 
@@ -20,10 +19,10 @@ namespace SnakeMess
         {
             newDirection = Direction.down;
             lastDirection = newDirection;
-            int boardW = Console.WindowWidth;
-            int boardH = Console.WindowHeight;
-            Console.CursorVisible = false;
-            Console.Title = "Westerdals Oslo ACT - SNAKE";
+            int boardW = WindowWidth;
+            int boardH = WindowHeight;
+            CursorVisible = false;
+            Title = "Westerdals Oslo ACT - SNAKE";
 
             GameObject gameObject = new GameObject(boardW, boardH);
 
@@ -31,7 +30,7 @@ namespace SnakeMess
             t.Start();
             while (!gameOver)
             {
-                if (Console.KeyAvailable)
+                if (KeyAvailable)
                 {
                     handleUserInput();
                 }
@@ -40,8 +39,8 @@ namespace SnakeMess
                     if (t.ElapsedMilliseconds < 100)
                         continue;
                     t.Restart();
-                    Point tail = new Point(gameObject.getSnakeBodysFirst());
-                    Point head = new Point(gameObject.getSnakeBodysLast());
+                    Point tail = new Point(gameObject.GetSnakeBodysFirst());
+                    Point head = new Point(gameObject.GetSnakeBodysLast());
                     Point newH = new Point(head);
                     switch (newDirection)
                     {
@@ -62,20 +61,20 @@ namespace SnakeMess
                         gameOver = true;
                     else if (newH.Y < 0 || newH.Y >= boardH)
                         gameOver = true;
-                    if (newH.X == gameObject.getApplePoint_X() && newH.Y == gameObject.getApplePoint_Y())
+                    if (newH.X == gameObject.GetApplePoint_X() && newH.Y == gameObject.GetApplePoint_Y())
                     {
-                        if (gameObject.getSnakeCount() + 1 >= boardW * boardH)
+                        if (gameObject.GetSnakeCount() + 1 >= boardW * boardH)
                             // No more room to place apples - game over.
                             gameOver = true;
                         else
                         {
-                            inUse = gameObject.printNextApple();
+                            inUse = gameObject.PrintNextApple();
                         }
                     }
                     if (!inUse)
                     {
-                        gameObject.removeitemFromSnakeAtIndex(0);
-                        foreach (Point x in gameObject.getSnake().bodyList)
+                        gameObject.RemoveitemFromSnakeAtIndex(0);
+                        foreach (Point x in gameObject.GetSnake().bodyList)
                             if (x.X == newH.X && x.Y == newH.Y)
                             {
                                 // Death by accidental self-cannibalism.
@@ -85,25 +84,25 @@ namespace SnakeMess
                     }
                     if (!gameOver)
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.SetCursorPosition(head.X, head.Y);
-                        Console.Write("0");
+                        ForegroundColor = Yellow;
+                        SetCursorPosition(head.X, head.Y);
+                        Write("0");
                         if (!inUse)
                         {
-                            Console.SetCursorPosition(tail.X, tail.Y);
-                            Console.Write(" ");
+                            SetCursorPosition(tail.X, tail.Y);
+                            Write(" ");
                         }
                         else
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.SetCursorPosition(gameObject.getApplePoint_X(), gameObject.getApplePoint_Y());
-                            Console.Write("$");
+                            ForegroundColor = Green;
+                            SetCursorPosition(gameObject.GetApplePoint_X(), gameObject.GetApplePoint_Y());
+                            Write("$");
                             inUse = false;
                         }
-                        gameObject.addToSnake(newH);
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.SetCursorPosition(newH.X, newH.Y);
-                        Console.Write("@");
+                        gameObject.AddToSnake(newH);
+                        ForegroundColor = Yellow;
+                        SetCursorPosition(newH.X, newH.Y);
+                        Write("@");
                         lastDirection = newDirection;
                     }
                 }
@@ -111,7 +110,7 @@ namespace SnakeMess
         }
 
         public static void handleUserInput() {
-            ConsoleKeyInfo cki = Console.ReadKey(true);
+            ConsoleKeyInfo cki = ReadKey(true);
             if (cki.Key == ConsoleKey.Escape)
                 gameOver = true;
             else if (cki.Key == ConsoleKey.Spacebar)

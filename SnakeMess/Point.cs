@@ -3,8 +3,7 @@ namespace SnakeMess
 {
     class Point
     {
-
-        #region Propertis
+        #region Properties
         public int X
         {
             get; set;
