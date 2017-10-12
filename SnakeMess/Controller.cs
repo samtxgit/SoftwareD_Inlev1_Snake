@@ -26,7 +26,6 @@ namespace SnakeMess
             Console.Title = "Westerdals Oslo ACT - SNAKE";
 
             GameObject gameObject = new GameObject(boardW, boardH);
-            gameObject.apple.printFirstApple(gameObject.snake);
 
             Stopwatch t = new Stopwatch();
             t.Start();
@@ -41,8 +40,8 @@ namespace SnakeMess
                     if (t.ElapsedMilliseconds < 100)
                         continue;
                     t.Restart();
-                    Point tail = new Point(gameObject.snake.body.First());
-                    Point head = new Point(gameObject.snake.body.Last());
+                    Point tail = new Point(gameObject.getSnakeBodysFirst());
+                    Point head = new Point(gameObject.getSnakeBodysLast());
                     Point newH = new Point(head);
                     switch (newDirection)
                     {
@@ -63,20 +62,20 @@ namespace SnakeMess
                         gameOver = true;
                     else if (newH.Y < 0 || newH.Y >= boardH)
                         gameOver = true;
-                    if (newH.X == gameObject.apple.point.X && newH.Y == gameObject.apple.point.Y)
+                    if (newH.X == gameObject.getApplePoint_X() && newH.Y == gameObject.getApplePoint_Y())
                     {
-                        if (gameObject.snake.body.Count + 1 >= boardW * boardH)
+                        if (gameObject.getSnakeCount() + 1 >= boardW * boardH)
                             // No more room to place apples - game over.
                             gameOver = true;
                         else
                         {
-                            inUse = gameObject.apple.printNextApple(gameObject.snake);
+                            inUse = gameObject.printNextApple();
                         }
                     }
                     if (!inUse)
                     {
-                        gameObject.snake.body.RemoveAt(0);
-                        foreach (Point x in gameObject.snake.body)
+                        gameObject.removeitemFromSnakeAtIndex(0);
+                        foreach (Point x in gameObject.getSnake().body)
                             if (x.X == newH.X && x.Y == newH.Y)
                             {
                                 // Death by accidental self-cannibalism.
@@ -97,11 +96,11 @@ namespace SnakeMess
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.SetCursorPosition(gameObject.apple.point.X, gameObject.apple.point.Y);
+                            Console.SetCursorPosition(gameObject.getApplePoint_X(), gameObject.getApplePoint_Y());
                             Console.Write("$");
                             inUse = false;
                         }
-                        gameObject.snake.body.Add(newH);
+                        gameObject.addToSnake(newH);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.SetCursorPosition(newH.X, newH.Y);
                         Console.Write("@");
