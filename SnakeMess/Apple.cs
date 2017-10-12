@@ -26,7 +26,7 @@ namespace SnakeMess
 
         }
 
-        public void printNextApple(Snake snake) {
+        public void printFirstApple(Snake snake) {
             while (true)
             {
                 this.nextRandomPosition();
@@ -46,6 +46,26 @@ namespace SnakeMess
                     Console.SetCursorPosition(point.X, point.Y);
                     Console.Write("$");
                     break;
+                }
+            }
+        }
+
+        public bool printNextApple(Snake snake) {
+            bool inUse = false;
+            while (true)
+            {
+                this.nextRandomPosition();
+                bool found = true;
+                foreach (Point i in snake.body)
+                    if (i.X == this.point.X && i.Y == this.point.Y)
+                    {
+                        found = false;
+                        break;
+                    }
+                if (found)
+                {
+                    inUse = true;
+                    return inUse;
                 }
             }
         }

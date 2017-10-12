@@ -15,7 +15,7 @@ namespace SnakeMess
         static bool inUse = false;
         static Direction newDirection;
         static Direction lastDirection;
-        // 0 = up, 1 = right, 2 = down, 3 = left
+
         public static void Main(string[] arguments)
         {
             newDirection = Direction.down;
@@ -26,7 +26,7 @@ namespace SnakeMess
             Console.Title = "Westerdals Oslo ACT - SNAKE";
 
             GameObject gameObject = new GameObject(boardW, boardH);
-            gameObject.apple.printNextApple(gameObject.snake);
+            gameObject.apple.printFirstApple(gameObject.snake);
 
             Stopwatch t = new Stopwatch();
             t.Start();
@@ -70,22 +70,7 @@ namespace SnakeMess
                             gameOver = true;
                         else
                         {
-                            while (true)
-                            {
-                                gameObject.apple.nextRandomPosition();
-                                bool found = true;
-                                foreach (Point i in gameObject.snake.body)
-                                    if (i.X == gameObject.apple.point.X && i.Y == gameObject.apple.point.Y)
-                                    {
-                                        found = false;
-                                        break;
-                                    }
-                                if (found)
-                                {
-                                    inUse = true;
-                                    break;
-                                }
-                            }
+                            inUse = gameObject.apple.printNextApple(gameObject.snake);
                         }
                     }
                     if (!inUse)
